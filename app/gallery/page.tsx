@@ -82,6 +82,7 @@ export default function Gallery() {
       const { data, error } = await supabase.storage
         .from("timelapse")
         .list(`frames/${project}/${dateString}`, {
+          limit: 1000,
           sortBy: {
             column: "name",
             order: "asc",
