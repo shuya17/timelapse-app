@@ -174,7 +174,11 @@ export default function Home() {
         if (!blob) return;
 
         // const fileName = `frame_${Date.now()}.webp`;
-        const today = new Date().toISOString().split("T")[0];
+        const nowTime = new Date();
+        const year = nowTime.getFullYear();
+        const month = String(nowTime.getMonth() + 1).padStart(2, "0"); // 月は0から始まるので+1
+        const date = String(nowTime.getDate()).padStart(2, "0");
+        const today = `${year}-${month}-${date}`;
         const fileName = `frame_${Date.now()}.webp`;
         const filePath = `frames/${project}/${today}/${fileName}`;
         const { error } = await supabase.storage
