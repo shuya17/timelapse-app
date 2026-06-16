@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import Link from "next/link";
 import UIButton from "./components/Button";
+import { getJSTDateString } from "@/lib/date";
 export default function Home() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -175,10 +176,7 @@ export default function Home() {
 
         // const fileName = `frame_${Date.now()}.webp`;
         const nowTime = new Date();
-        const year = nowTime.getFullYear();
-        const month = String(nowTime.getMonth() + 1).padStart(2, "0"); // 月は0から始まるので+1
-        const date = String(nowTime.getDate()).padStart(2, "0");
-        const today = `${year}-${month}-${date}`;
+        const today = getJSTDateString();
         const fileName = `frame_${Date.now()}.webp`;
         const filePath = `frames/${project}/${today}/${fileName}`;
         const { error } = await supabase.storage

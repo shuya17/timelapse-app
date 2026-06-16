@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import Link from "next/link";
 import UIButton from "../components/Button";
+import { getJSTDateString } from "@/lib/date";
 
 export default function Gallery() {
   const [images, setImages] = useState<string[]>([]);
@@ -12,7 +13,7 @@ export default function Gallery() {
   const [speed, setSpeed] = useState(200);
   const [project, setProject] = useState("experiment1");
   const [projects, setProjects] = useState<string[]>([]);
-  const today = new Date().toISOString().split("T")[0];
+  const today = getJSTDateString();
 
   const [startDate, setStartDate] = useState(today);
   const [endDate, setEndDate] = useState(today);
@@ -69,11 +70,15 @@ export default function Gallery() {
   const fetchImages = async () => {
     // 指定された期間の日付文字列（YYYY-MM-DD）の配列を先に作成
     const dateList: string[] = [];
-    const current = new Date(startDate);
-    const end = new Date(endDate);
+    
+    const current = new Date(startDate + "T12:00:00+09:00");
+    const end = new Date(endDate + "T12:00:00+09:00");
+    const formatter = new Intl.DateTimeFormat("sv-SE", {
+      timeZone: "Asia/Tokyo",
+    });
 
     while (current <= end) {
-      dateList.push(current.toISOString().split("T")[0]);
+      dateList.push(formatter.format(current));
       current.setDate(current.getDate() + 1);
     }
 
@@ -112,7 +117,7 @@ export default function Gallery() {
     } catch (err) {
       console.error("画像の取得中にエラーが発生しました:", err);
     }
-  };
+  };;
 
   const downloadImage = async (url: string, index: number) => {
     const response = await fetch(url);
